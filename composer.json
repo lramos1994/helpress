@@ -1,7 +1,6 @@
 {
     "name": "lramos/helpress",
     "description": "A bunch of Helpers to wordpress",
-    "type": "library",
     "minimum-stability": "dev",
     "authors": [
         {
