@@ -50,7 +50,7 @@ class AdminPage
 
     public function getMenuSlug()
     {
-        return config('plugin','name').'/'.$this->slug.'.php';
+        return 'admin-page/'.$this->slug.'.php';
     }
 }
 
