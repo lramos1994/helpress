@@ -4,22 +4,21 @@ namespace Helpress;
 
 abstract class HttpRequest
 {
-    protected $url;
+    protected $base_url;
 
     protected $body = [];
 
     protected $headers = [];
 
-    public function post() {
+    public function post($method, $body = []) {
 
         $args = [
             'timeout' => 45,
             'headers' => $this->headers,
-            'body'    => json_encode( $this->body ),
+            'body'    => json_encode( array_merge($this->body, $body) ),
         ];
 
-        return wp_remote_post( $this->url, $args );
-
+        return $this->response(wp_remote_post($this->base_url.$method, $args));
     }
 
      public function get( $params = [] ) {
@@ -112,5 +111,14 @@ abstract class HttpRequest
             'body'    => json_decode( wp_remote_retrieve_body( $response ), true ),
             'headers' => wp_remote_retrieve_headers( $response )
         ];
+    }
+
+    public function response($response)
+    {
+        if ( is_wp_error( $response ) ) {
+            return $response->get_error_message();
+        } else {
+            return isset($response['body']) ? json_decode($response['body'], true) : null;
+        }
     }
 }
